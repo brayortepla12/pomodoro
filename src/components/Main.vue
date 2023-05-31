@@ -1,37 +1,53 @@
-<script setup></script>
+<script setup>
+import TableTask from "./TableTask.vue" 
+import { ref } from "vue"
+const task = ref([])
+const titleTask = ref("")
+
+const generaId = () => {
+  return Math.random().toString(30).substring(2).substring(0,4)
+}
+
+const addTask = () => {
+  const newTask = {
+    Id: generaId(),
+    Titulo: titleTask.value,
+    Estado: "Pendiente",
+  }
+  task.value.unshift(newTask)
+  titleTask.value = ""
+}
+</script>
 
 <template>
-  <div class="w-75 container mt-5">
-    <table class="table table-striped ">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td colspan="2">Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </table>
+  <div
+    class="shadow px-5 py-4 mb-3 mt-5 bg-body-tertiary rounded-4 container"
+    style="width: 35%"
+  >
+    <div class="card-body">
+      <h1 class="card-title fs-1 mb-3 text-center">00:00:00</h1>
+      <form @submit.prevent="onSubmit">
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Tarea"
+            aria-label="Username"
+            v-model="titleTask"
+          />
+        </div>
+        <button type="submit" @click="addTask" class="btn btn-primary">
+          Agregar
+        </button>
+      </form>
+    </div>
   </div>
+  <TableTask v-bind:myTask="task"></TableTask>
 </template>
 
-<style scoped></style>
+<style scoped>
+button {
+  padding: 5px 40px;
+}
+/* cornflowerblue : color */
+</style>
