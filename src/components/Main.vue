@@ -3,9 +3,14 @@ import TableTask from "./TableTask.vue"
 import { ref } from "vue"
 const task = ref([])
 const titleTask = ref("")
+const timeTask = ref("00:00:00")
 
 const generaId = () => {
   return Math.random().toString(30).substring(2).substring(0,4)
+}
+
+function renderTime(time){
+  timeTask.value = time
 }
 
 const addTask = () => {
@@ -25,7 +30,7 @@ const addTask = () => {
     style="width: 35%"
   >
     <div class="card-body">
-      <h1 class="card-title fs-1 mb-3 text-center">00:00:00</h1>
+      <h1 class="card-title fs-1 mb-3 text-center">{{ timeTask }}</h1>
       <form @submit.prevent="onSubmit">
         <div class="mb-3">
           <input
@@ -42,7 +47,7 @@ const addTask = () => {
       </form>
     </div>
   </div>
-  <TableTask v-bind:myTask="task"></TableTask>
+  <TableTask v-bind:myTask="task" v-on:renderTime="renderTime"></TableTask>
 </template>
 
 <style scoped>
