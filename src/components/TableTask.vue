@@ -5,9 +5,10 @@ const headlist =["Id","Titulo","Estado"]
 
 let time = 0
 let timer = null
+let breakTask = true
 
 const initTask = (myTask)=>{
-  time = 0.1 * 60;
+  time = 0.1 * 60
   myTask.Estado="Proceso"
   
   timer = setInterval(() => {
@@ -18,10 +19,21 @@ const initTask = (myTask)=>{
 function timerStart (myTask){
   time--;
   emit('renderTime',renderTime())
-  if (time === 0) {
+  if (time === 0){
     clearInterval(timer)
     myTask.Estado ="Terminado"
+    if(breakTask){
+      initBreak(myTask)
+    }
   }
+}
+
+function initBreak (myTask) {
+  breakTask = false
+  time = 1*10
+  timer = setInterval(()=>{
+    timerStart(myTask);
+  },1000)
 }
 
 function renderTime() {
@@ -44,7 +56,7 @@ function renderTime() {
   </thead>
   <tbody>
       <tr v-for="item in props.myTask" :key='item'>
-        <td v-for="head in headlist" :key='head'>
+        <td v-for="head in headlist" :key='head' valign="middle">
           <i class="bg-primary text-white font-weight-normal px-3 rounded-2" v-if="head == 'Estado' && item.Estado == 'Pendiente'">
             {{item[head]}} 
           </i>
@@ -58,8 +70,8 @@ function renderTime() {
             {{item[head]}}   
           </div>
         </td>
-        <td>
-          <button type="button" @click="initTask(item)" disabled class="btn bg-primary text-white border-0 rounded-2" style="padding: auto;">
+        <td valign="middle">
+          <button type="button"  :disabled="item.Estado == 'Terminado' || time != 0" @click="initTask(item)" class="btn bg-primary text-white border-0 rounded-2" style="padding: 4px 10px;">
             <font-awesome-icon icon="stopwatch"/>
           </button>
         </td>
